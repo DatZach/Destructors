@@ -42,21 +42,20 @@ function DtorInstance(_reference, _type, _value, _option) constructor {
 
 function DtorManager() constructor {
 	tracked = ds_list_create();
-	dtorId = 0;
-	tmpRef = undefined;
 	
 	capture = function (reference) {
-		tmpRef = reference;
-		return function(type, value, option) {
+		return method({
+			tracked: tracked,
+			reference: reference
+		}, function(type, value, option) {
 			if (is_method(value))
 				value = method({}, method_get_index(value));
 			if (is_method(option))
 				option = method({}, method_get_index(option));
 		
-			ds_list_add(tracked, new DtorInstance(tmpRef, type, value, option));
-			tmpRef.__DtorID = dtorId++;
-			tmpRef = undefined;
-		};
+			ds_list_add(tracked, new DtorInstance(reference, type, value, option));
+			reference.__DtorID = get_timer();
+		});
 	}
 	
 	update = function () {

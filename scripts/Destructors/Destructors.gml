@@ -43,7 +43,7 @@ function DtorInstance(_reference, _type, _value, _option) constructor {
 function DtorManager() constructor {
 	tracked = ds_list_create();
 	
-	capture = function (reference) {
+	static capture = function (reference) {
 		return method({
 			tracked: tracked,
 			reference: reference
@@ -58,7 +58,7 @@ function DtorManager() constructor {
 		});
 	}
 	
-	update = function () {
+	static update = function () {
 		for (var i = 0, isize = ds_list_size(tracked); i < isize; ++i) {
 			var inst = tracked[| i];
 			try {

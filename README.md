@@ -60,7 +60,7 @@ Clone this repo and open and run the project in GameMaker: Studio. Follow the on
 ## Authors
 
 * **Zach Reedy** - *Developed first implementation. Finalized codebase.* - [DatZach](https://github.com/DatZach)
-* **JuJu Adams** - *Second draft implementation. Examples.* - [JujuAdams](https://github.com/JujuAdams)
+* **Juju Adams** - *Second draft implementation. Examples.* - [JujuAdams](https://github.com/JujuAdams)
 * **Torin Freimiller** - *Initial discoveries related to tracking objects.* - [Nommiin](https://github.com/nommiin)
 
 ## License

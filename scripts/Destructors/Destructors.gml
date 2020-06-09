@@ -43,10 +43,10 @@ function DtorInstance(_reference, _type, _value, _option) constructor {
 function DtorManager() constructor {
 	tracked = ds_list_create();
 	
-	static capture = function (reference) {
+	static capture = function (_reference) {
 		return method({
 			tracked: tracked,
-			reference: reference
+			reference: _reference
 		}, function(type, value, option) {
 			if (is_method(value))
 				value = method({}, method_get_index(value));
@@ -69,34 +69,32 @@ function DtorManager() constructor {
 	                case DtorType.Function:		inst.value(inst.option);				break;
 	                case DtorType.Script:		script_execute(inst.value, inst.option);break;
                 
-	                case DtorType.List:          ds_list_destroy(inst.value);           break;
-	                case DtorType.Map:           ds_map_destroy(inst.value);            break;
-	                case DtorType.Grid:          ds_grid_destroy(inst.value);           break;
-	                case DtorType.Priority:      ds_priority_destroy(inst.value);       break;
-	                case DtorType.Queue:         ds_queue_destroy(inst.value);          break;
-	                case DtorType.Stack:         ds_stack_destroy(inst.value);          break;
-	                case DtorType.Buffer:        buffer_delete(inst.value);             break;
+	                case DtorType.List:			ds_list_destroy(inst.value);			break;
+	                case DtorType.Map:			ds_map_destroy(inst.value);				break;
+	                case DtorType.Grid:			ds_grid_destroy(inst.value);			break;
+	                case DtorType.Priority:		ds_priority_destroy(inst.value);		break;
+	                case DtorType.Queue:		ds_queue_destroy(inst.value);			break;
+	                case DtorType.Stack:		ds_stack_destroy(inst.value);			break;
+	                case DtorType.Buffer:		buffer_delete(inst.value);				break;
                 
-	                case DtorType.Sprite:        sprite_delete(inst.value);             break;
-	                case DtorType.Surface:       surface_free(inst.value);              break;
-	                case DtorType.VertexBuffer:  vertex_delete_buffer(inst.value);      break;
-	                case DtorType.VertexFormat:  vertex_format_delete(inst.value);      break;
+	                case DtorType.Sprite:		sprite_delete(inst.value);				break;
+	                case DtorType.Surface:		surface_free(inst.value);				break;
+	                case DtorType.VertexBuffer:	vertex_delete_buffer(inst.value);		break;
+	                case DtorType.VertexFormat:	vertex_format_delete(inst.value);		break;
                 
-	                case DtorType.Path:          path_delete(inst.value);               break;
-	                case DtorType.AnimCurve:     animcurve_destroy(inst.value);         break;
-	                case DtorType.Instance:      instance_destroy(inst.value);          break;
+	                case DtorType.Path:			path_delete(inst.value);				break;
+	                case DtorType.AnimCurve:	animcurve_destroy(inst.value);			break;
+	                case DtorType.Instance:		instance_destroy(inst.value);			break;
 				}
 				
-				ds_list_delete(tracked, i);
+				ds_list_delete(tracked, i--);
+				--isize;
 			}
 		}
 	};
 }
 
 function dtorInstance() {
-	static instance = undefined;
-	if (instance == undefined)
-		instance = new DtorManager();
-	
+	static instance = new DtorManager();
 	return instance;
 }

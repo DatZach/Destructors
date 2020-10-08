@@ -27,8 +27,8 @@
     "name": "Default",
     "children": [],
   },
-  "RoomOrder": [
-    {"name":"Room1","path":"rooms/Room1/Room1.yy",},
+  "RoomOrderNodes": [
+    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "Folders": [
     {"folderPath":"folders/Example/Rooms.yy","order":2,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
@@ -42,9 +42,9 @@
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "23.1.1.149",
+    "IDEVersion": "23.1.1.193",
   },
-  "resourceVersion": "1.3",
+  "resourceVersion": "1.4",
   "name": "Destructors",
   "tags": [],
   "resourceType": "GMProject",

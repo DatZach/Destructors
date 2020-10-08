@@ -1,5 +1,5 @@
 var _string = @"
-GMS2.3.0 Destructors - Zach Reedy / Juju Adams / Nommiin
+GMS 2.3.1 Destructors - Zach Reedy / Juju Adams / Nommiin
 
 Press 1 to destroy struct <a> --> Garbage collects a list
 Press 2 to destroy struct <b> --> Executes a callback function

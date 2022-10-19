@@ -2,7 +2,6 @@
 /// @author Zach Reedy <DatZach>
 /// @author Juju Adams <JujuAdams>
 /// @author Torin Freimiller <Nommiin>
-#macro DTOR_ITER 90
 #macro DTOR_DEBUG false
 
 /// @ignore
@@ -69,7 +68,7 @@ global.dtorLoop = time_source_create(time_source_global, 5, time_source_units_fr
 		}
 		
 		switch(_inst.type) {
-		    case DtorType.Function:		_inst.value(_inst.option);					break;
+		    case DtorType.Function:		_inst.value(_inst.option);			break;
 		    case DtorType.Script:		script_execute(_inst.value, _inst.option);	break;
 		            
 		    case DtorType.List:			ds_list_destroy(_inst.value);		break;
@@ -78,15 +77,15 @@ global.dtorLoop = time_source_create(time_source_global, 5, time_source_units_fr
 		    case DtorType.Priority:		ds_priority_destroy(_inst.value);	break;
 		    case DtorType.Queue:		ds_queue_destroy(_inst.value);		break;
 		    case DtorType.Stack:		ds_stack_destroy(_inst.value);		break;
-		    case DtorType.Buffer:		buffer_delete(_inst.value);			break;
+		    case DtorType.Buffer:		buffer_delete(_inst.value);		break;
 			
-			case DtorType.Sprite:		sprite_delete(_inst.value);			break;
-		    case DtorType.Surface:		surface_free(_inst.value);			break;
-		    case DtorType.VertexBuffer:	vertex_delete_buffer(_inst.value);	break;
-		    case DtorType.VertexFormat:	vertex_format_delete(_inst.value);	break;
+		    case DtorType.Sprite:		sprite_delete(_inst.value);		break;
+		    case DtorType.Surface:		surface_free(_inst.value);		break;
+		    case DtorType.VertexBuffer:		vertex_delete_buffer(_inst.value);	break;
+		    case DtorType.VertexFormat:		vertex_format_delete(_inst.value);	break;
 			
-		    case DtorType.Path:			path_delete(_inst.value);			break;
-		    case DtorType.AnimCurve:	animcurve_destroy(_inst.value);		break;
+		    case DtorType.Path:			path_delete(_inst.value);		break;
+		    case DtorType.AnimCurve:	        animcurve_destroy(_inst.value);		break;
 		    case DtorType.Instance:		instance_destroy(_inst.value);		break;
 		}
 		

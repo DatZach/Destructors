@@ -16,11 +16,6 @@ You can simply copy and paste the contents of [Destructors.gml](https://github.c
 
 ### Usage
 
-The following code should be called inside of the `Step` event of a persistent object, created in the first room of your game. This is typically your Game Controller object.
-```javascript
-dtor.update();
-```
-
 Destructors are registered via the `dtor_track(type, value, [option])` function. This function can be called multiple times on the same struct instance to registered multiple destructors.
 
 In order to register a destructor callback,

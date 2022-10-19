@@ -1,4 +1,7 @@
 {
+  "resourceType": "GMProject",
+  "resourceVersion": "1.6",
+  "name": "Destructors",
   "resources": [
     {"id":{"name":"oExample","path":"objects/oExample/oExample.yy",},"order":0,},
     {"id":{"name":"oExample_CallbackScript","path":"scripts/oExample_CallbackScript/oExample_CallbackScript.yy",},"order":1,},
@@ -17,8 +20,6 @@
     {"name":"Switch","path":"options/switch/options_switch.yy",},
     {"name":"tvOS","path":"options/tvos/options_tvos.yy",},
     {"name":"Windows","path":"options/windows/options_windows.yy",},
-    {"name":"Windows UWP","path":"options/windowsuap/options_windowsuap.yy",},
-    {"name":"Xbox One","path":"options/xboxone/options_xboxone.yy",},
     {"name":"operagx","path":"options/operagx/options_operagx.yy",},
   ],
   "defaultScriptType": 1,
@@ -31,21 +32,17 @@
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
   ],
   "Folders": [
-    {"folderPath":"folders/Example/Rooms.yy","order":2,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Example.yy","order":14,"resourceVersion":"1.0","name":"Example","tags":[],"resourceType":"GMFolder",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Example","folderPath":"folders/Example.yy","order":14,},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Rooms","folderPath":"folders/Example/Rooms.yy","order":2,},
   ],
   "AudioGroups": [
-    {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
+    {"resourceType":"GMAudioGroup","resourceVersion":"1.3","name":"audiogroup_default","targets":-1,},
   ],
   "TextureGroups": [
-    {"isScaled":true,"compressFormat":"bz2","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
+    {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","isScaled":true,"compressFormat":"bz2","loadType":"default","directory":"","autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,},
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2022.300.0.499",
+    "IDEVersion": "2022.900.0.218",
   },
-  "resourceVersion": "1.5",
-  "name": "Destructors",
-  "tags": [],
-  "resourceType": "GMProject",
 }

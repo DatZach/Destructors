@@ -2,14 +2,12 @@
 /// @author Zach Reedy <DatZach>
 /// @author Juju Adams <JujuAdams>
 /// @author Torin Freimiller <Nommiin>
-
-// #macro dtor __Dtor()
-// #macro dtor_track dtor.capture(self)
-
-global.__dtor = ds_list_create();
-global.__dtor_index = 0;
-
 #macro DTOR_ITER 90
+#macro DTOR_DEBUG false
+
+/// @ignore
+global.dtorTrack = ds_list_create();
+global.dtorSize  = 0;
 
 enum DtorType {
     Function,
@@ -33,126 +31,71 @@ enum DtorType {
     Instance
 }
 
-function __DtorInstance(_ref, _type, _value, _option) constructor {
+/// @ignore
+/// @param {enum.DtorType} type
+/// @param {Any} value
+/// @param {Any} [options]
+/// @param {Any} [reference]
+function DtorInstance(_type, _value, _option, _ref) constructor {
 	reference = weak_ref_create(_ref);
-	type = _type;
-	value = _value;
+	type   =   _type;
+	value  =  _value;
 	option = _option;
 }
 
-function dtor_track(type, value, option, ref=self) {
-	if (!layer_exists("__lyrDestructors") ) layer_script_end(layer_create(41), __dtor_update);
-	ds_list_add(global.__dtor, new __DtorInstance(ref, type, value, option) );
+function dtor(_type, _value, _option, _ref=self) {
+	ds_list_add(global.dtorTrack, new DtorInstance(_type, _value, _option, _ref) );
+	global.dtorSize = ds_list_size(global.dtorTrack);
 }
 
-function __dtor_update() {
-    if (event_type == ev_draw) {
-		if (!event_number) {
-			if (global.__dtor_index++ > DTOR_ITER)
-				global.__dtor_index = 0;			
-			
-			if (global.__dtor_index > 0) exit;
-			
-			for (var i = 0, isize = ds_list_size(global.__dtor); i < isize; ++i) {
-				var inst = global.__dtor[| i];
-				
-				// Salir rapido
-				if (weak_ref_alive(inst.reference) ) continue;
-		
-				switch(inst.type) {
-		            case DtorType.Function:		inst.value(inst.option);				break;
-		            case DtorType.Script:		script_execute(inst.value, inst.option);break;
-		            
-		            case DtorType.List:			ds_list_destroy(inst.value);			break;
-		            case DtorType.Map:			ds_map_destroy(inst.value);				break;
-		            case DtorType.Grid:			ds_grid_destroy(inst.value);			break;
-		            case DtorType.Priority:		ds_priority_destroy(inst.value);		break;
-		            case DtorType.Queue:		ds_queue_destroy(inst.value);			break;
-		            case DtorType.Stack:		ds_stack_destroy(inst.value);			break;
-		            case DtorType.Buffer:		buffer_delete(inst.value);				break;
-		            
-		            case DtorType.Sprite:		sprite_delete(inst.value);				break;
-		            case DtorType.Surface:		surface_free(inst.value);				break;
-		            case DtorType.VertexBuffer:	vertex_delete_buffer(inst.value);		break;
-		            case DtorType.VertexFormat:	vertex_format_delete(inst.value);		break;
-		            
-		            case DtorType.Path:			path_delete(inst.value);				break;
-		            case DtorType.AnimCurve:	animcurve_destroy(inst.value);			break;
-		            case DtorType.Instance:		instance_destroy(inst.value);			break;
-				}
-				
-				ds_list_delete(global.__dtor, i);
-				show_debug_message("Dtor Deleted " + string(i) );
-				
-				--isize;
-			}		
-		}
-    }
-}
-
-/*
-function DtorManager() constructor {
-	tracked = [];
-	
-	static capture = function (_reference) {
-		return method({
-			tracked: tracked,
-			reference: _reference
-		}, function(type, value, option) {
-			if (is_method(value))
-				value = method({}, method_get_index(value));
-			if (is_method(option))
-				option = method({}, method_get_index(option));
-		
-			array_push(tracked, new DtorInstance(reference, type, value, option));
-		});
+// Feather disable once GM1043
+/// @ignore
+global.dtorLoop = time_source_create(time_source_global, 5, time_source_units_frames, function() {
+	// Feather disable once GM2017
+	static clip = function(_data, _min, _max) 
+	{
+		if (_data > _max) {return (_min); } else
+		if (_data < _min) {return (_max); } 
+		return (_data );
 	}
-	
-	static update = function () {
-		for (var i = 0, isize = array_length(tracked); i < isize; ++i) {
-			var inst = tracked[i];
-			if (weak_ref_alive(inst.reference))
-				continue;
-
-			switch(inst.type) {
-	            case DtorType.Function:		inst.value(inst.option);				break;
-	            case DtorType.Script:		script_execute(inst.value, inst.option);break;
-                
-	            case DtorType.List:			ds_list_destroy(inst.value);			break;
-	            case DtorType.Map:			ds_map_destroy(inst.value);				break;
-	            case DtorType.Grid:			ds_grid_destroy(inst.value);			break;
-	            case DtorType.Priority:		ds_priority_destroy(inst.value);		break;
-	            case DtorType.Queue:		ds_queue_destroy(inst.value);			break;
-	            case DtorType.Stack:		ds_stack_destroy(inst.value);			break;
-	            case DtorType.Buffer:		buffer_delete(inst.value);				break;
-                
-	            case DtorType.Sprite:		sprite_delete(inst.value);				break;
-	            case DtorType.Surface:		surface_free(inst.value);				break;
-	            case DtorType.VertexBuffer:	vertex_delete_buffer(inst.value);		break;
-	            case DtorType.VertexFormat:	vertex_format_delete(inst.value);		break;
-                
-	            case DtorType.Path:			path_delete(inst.value);				break;
-	            case DtorType.AnimCurve:	animcurve_destroy(inst.value);			break;
-	            case DtorType.Instance:		instance_destroy(inst.value);			break;
-			}
-			
-			array_delete(tracked, i--, 1);
-			--isize;
+	static index = 0;
+	var n = global.dtorSize;
+	if (n > 0) {
+		var _inst = global.dtorTrack[| index];
+		// Still alive
+		if (weak_ref_alive(_inst.reference) ) {
+			index = clip(index + 1, 0, n - 1);
+			exit; 
 		}
-	};
-}
-
-function __Dtor() {
-	static instance = new DtorManager();
-	
-	if (!layer_exists("__lyrDestructors") ) {
-		var _layer = layer_create(0);
-		layer_script_end(_layer, instance.update);
+		
+		switch(_inst.type) {
+		    case DtorType.Function:		_inst.value(_inst.option);					break;
+		    case DtorType.Script:		script_execute(_inst.value, _inst.option);	break;
+		            
+		    case DtorType.List:			ds_list_destroy(_inst.value);		break;
+		    case DtorType.Map:			ds_map_destroy(_inst.value);		break;
+		    case DtorType.Grid:			ds_grid_destroy(_inst.value);		break;
+		    case DtorType.Priority:		ds_priority_destroy(_inst.value);	break;
+		    case DtorType.Queue:		ds_queue_destroy(_inst.value);		break;
+		    case DtorType.Stack:		ds_stack_destroy(_inst.value);		break;
+		    case DtorType.Buffer:		buffer_delete(_inst.value);			break;
+			
+			case DtorType.Sprite:		sprite_delete(_inst.value);			break;
+		    case DtorType.Surface:		surface_free(_inst.value);			break;
+		    case DtorType.VertexBuffer:	vertex_delete_buffer(_inst.value);	break;
+		    case DtorType.VertexFormat:	vertex_format_delete(_inst.value);	break;
+			
+		    case DtorType.Path:			path_delete(_inst.value);			break;
+		    case DtorType.AnimCurve:	animcurve_destroy(_inst.value);		break;
+		    case DtorType.Instance:		instance_destroy(_inst.value);		break;
+		}
+		
+		// Delete entry
+		ds_list_delete(global.dtorTrack, index);
+		global.dtorSize = ds_list_size(global.dtorTrack); // Update list size
+		if (DTOR_DEBUG) show_debug_message("Dtor Deleted " + string(index) );
+		// Go back in the loop
+		index = max(0, index - 1);
 	}
-	
-	return instance;
-}
-
-*/
-
-
+}, [], -1);
+time_source_start(global.dtorLoop);

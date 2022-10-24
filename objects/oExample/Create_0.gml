@@ -1,7 +1,10 @@
 function test1() constructor {
-    list = ds_list_create();
-
-    dtor(DtorType.List, list);
+	static start = function() {
+		list = ds_list_create();
+		global.listReference = list;
+		dtor(DtorType.List, list);
+	}
+    start();
 }
 
 function test2() constructor {
@@ -28,5 +31,3 @@ function test3() constructor {
 a = new test1();
 b = new test2();
 c = new test3();
-
-global.listReference = a.list;

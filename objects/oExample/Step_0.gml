@@ -15,3 +15,6 @@ if (keyboard_check_pressed(ord("3"))) {
     delete c;
 }
 
+if (keyboard_check_pressed(ord("4"))) {
+	a = new test1();
+}

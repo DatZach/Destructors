@@ -1,7 +1,5 @@
 // NOTE This is the only line that is required for GC Dtors to work.
 //		Should be placed inside of a persistent game controller object
-dtor.update();
-
 if (keyboard_check_pressed(ord("1"))) {
     show_debug_message("Deleting <a>");
     delete a;
@@ -15,4 +13,8 @@ if (keyboard_check_pressed(ord("2"))) {
 if (keyboard_check_pressed(ord("3"))) {
     show_debug_message("Deleting <c>");
     delete c;
+}
+
+if (keyboard_check_pressed(ord("4"))) {
+	a = new test1();
 }

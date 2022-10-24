@@ -1,7 +1,10 @@
 function test1() constructor {
-    list = ds_list_create();
-
-    dtor_track(DtorType.List, list);
+	static start = function() {
+		list = ds_list_create();
+		global.listReference = list;
+		dtor(DtorType.List, list);
+	}
+    start();
 }
 
 function test2() constructor {
@@ -18,15 +21,13 @@ function test2() constructor {
         }
     }
     
-    dtor_track(DtorType.Function, callback, "This is a parameter passed into the function.");
+    dtor(DtorType.Function, callback, "This is a parameter passed into the function.");
 }
 
 function test3() constructor {
-    dtor_track(DtorType.Script, oExample_CallbackScript, "This is a parameter passed into the script.");
+    dtor(DtorType.Script, oExample_CallbackScript, "This is a parameter passed into the script.");
 }
 
 a = new test1();
 b = new test2();
 c = new test3();
-
-global.listReference = a.list;
